@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Confession Space | Ungkapkan Perasaanmu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2f 0%, #2a2a3b 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            color: #f0f0f0;
+        }
+
+        /* Container utama */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFB6C1, #FF9EB5, #DDA0DD);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+
+        /* Form confession */
+        .confess-card {
+            background: rgba(30, 30, 45, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: #2c2c3a;
+            border: 1px solid #4a4a60;
+            border-radius: 1.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+            color: white;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #FF9EB5;
+            box-shadow: 0 0 0 3px rgba(255, 158, 181, 0.3);
+            background: #353548;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            transform: scale(1.1);
+            accent-color: #FF9EB5;
+        }
+
+        button {
+            background: linear-gradient(95deg, #FF9EB5, #DDA0DD);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 3rem;
+            color: #1e1e2f;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+            filter: brightness(1.02);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Filter & pencarian */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+            background: rgba(20,20,30,0.6);
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 180px;
+        }
+
+        .search-box input {
+            padding: 0.7rem 1.2rem;
+            border-radius: 2rem;
+            background: #252531;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #2c2c3a;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #4a4a60;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active {
+            background: #FF9EB5;
+            color: #1e1e2f;
+            border-color: #FF9EB5;
+        }
+
+        /* Grid confession */
+        .confessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .confession-item {
+            background: #252533;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid #FF9EB5;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+            word-break: break-word;
+        }
+
+        .confession-item:hover {
+            transform: translateY(-5px);
+            background: #2d2d3e;
+        }
+
+        .confession-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            border-bottom: 1px dashed #4a4a60;
+            padding-bottom: 0.6rem;
+        }
+
+        .confession-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: linear-gradient(120deg, #FFB6C1, #FFDAB9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .confession-badge {
+            font-size: 0.7rem;
+            background: #3a3a4e;
+            padding: 0.2rem 0.7rem;
+            border-radius: 2rem;
+        }
+
+        .confession-date {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 0.2rem;
+        }
+
+        .confession-message {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+            color: #ececec;
+        }
+
+        .delete-confession {
+            background: none;
+            border: 1px solid #ff6b6b;
+            color: #ff8a8a;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 2rem;
+            width: auto;
+            box-shadow: none;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .delete-confession:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 2rem;
+            font-style: italic;
+            color: #b0b0c0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .confess-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>✦ Confession Space ✦</h1>
+        <p>tulis yang tersimpan, lepaskan yang tak terucap</p>
+    </div>
+
+    <!-- Form Kirim Confession -->
+    <div class="confess-card">
+        <form id="confessionForm">
+            <div class="form-group">
+                <label>👤 Nama / alias (opsional)</label>
+                <input type="text" id="authorName" placeholder="Misal: Anonymous, Mawar, atau biarkan kosong" maxlength="50">
+            </div>
+            <div class="form-group">
+                <label>💬 Isi pengakuan / pesan</label>
+                <textarea id="messageText" placeholder="Tulis perasaanmu di sini... (maks 600 karakter)" maxlength="600" required></textarea>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="anonymousCheckbox" checked>
+                <label for="anonymousCheckbox" style="margin-bottom: 0;">Tampilkan sebagai Anonim (override nama jika dicentang)</label>
+            </div>
+            <button type="submit">✉️ Kirim Confession</button>
+        </form>
+    </div>
+
+    <!-- Toolbar: Search & Filter -->
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Cari confession... (isi pesan / nama)" autocomplete="off">
+        </div>
+        <div class="filter-buttons">
+            <div class="filter-btn active" data-filter="all">Semua</div>
+            <div class="filter-btn" data-filter="anonymous">Anonim</div>
+            <div class="filter-btn" data-filter="named">Dengan Nama</div>
+        </div>
+    </div>
+
+    <!-- Daftar Confession -->
+    <div id="confessionsContainer" class="confessions-grid">
+        <!-- dynamic content -->
+        <div class="empty-state">✨ Belum ada confession. Jadilah yang pertama!</div>
+    </div>
+    <footer>❤️ Semua pengakuan tersimpan secara lokal — privasi dalam genggamanmu</footer>
+</div>
+
+<script>
+    // Data storage key
+    const STORAGE_KEY = "confession_app_data";
+
+    // Data structure: array of confession objects
+    let confessions = [];
+
+    // Current filter & search text
+    let currentFilter = "all";   // 'all', 'anonymous', 'named'
+    let currentSearch = "";
+
+    // Load from localStorage
+    function loadConfessions() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                confessions = JSON.parse(stored);
+                // ensure every item has id, timestamp, etc
+                if (!Array.isArray(confessions)) confessions = [];
+            } catch(e) { confessions = []; }
+        } else {
+            // Demo data untuk contoh awal (optional)
+            confessions = [
+                {
+                    id: Date.now() + 1,
+                    name: "Hana",
+                    message: "Aku suka diam-diam sama temen sekelas, tapi gak berani ngomong. Mungkin ini saatnya lega.",
+                    isAnonymous: false,
+                    timestamp: Date.now() - 86400000,
+                    displayName: "Hana"
+                },
+                {
+                    id: Date.now() + 2,
+                    name: "",
+                    message: "Maafin aku yang selalu mengecewakan diriku sendiri. Tapi mulai hari ini aku mau berubah.",
+                    isAnonymous: true,
+                    timestamp: Date.now() - 43200000,
+                    displayName: "Anonymous"
+                }
+            ];
+            saveConfessions();
+        }
+        renderConfessions();
+    }
+
+    function saveConfessions() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(confessions));
+    }
+
+    // Helper: format date
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+    }
+
+    // Add new confession
+    function addConfession(nameInput, messageInput, isAnonymousChecked) {
+        if (!messageInput.trim()) {
+            alert("Pesan confession tidak boleh kosong!");
+            return false;
+        }
+
+        let displayName = "Anonymous";
+        let originalName = nameInput.trim();
+
+        if (!isAnonymousChecked && originalName !== "") {
+            displayName = originalName;
+        } else if (isAnonymousChecked || originalName === "") {
+            displayName = "Anonymous";
+        } else {
+            displayName = originalName;
+        }
+
+        const newConfession = {
+            id: Date.now(),
+            name: originalName,       // store original for reference
+            message: messageInput.trim(),
+            isAnonymous: isAnonymousChecked,
+            timestamp: Date.now(),
+            displayName: displayName
+        };
+
+        confessions.unshift(newConfession); // tampilkan yang terbaru di atas
+        saveConfessions();
+        renderConfessions();
+        return true;
+    }
+
+    // Delete confession
+    function deleteConfession(id) {
+        confessions = confessions.filter(c => c.id !== id);
+        saveConfessions();
+        renderConfessions();
+    }
+
+    // Filter & search logic
+    function getFilteredConfessions() {
+        let filtered = [...confessions];
+
+        // Apply filter (anonymous / named)
+        if (currentFilter === "anonymous") {
+            filtered = filtered.filter(c => c.isAnonymous === true || c.displayName === "Anonymous");
+        } else if (currentFilter === "named") {
+            filtered = filtered.filter(c => !c.isAnonymous && c.displayName !== "Anonymous");
+        }
+
+        // Apply search (case-insensitive) on message + displayName
+        if (currentSearch.trim() !== "") {
+            const searchLower = currentSearch.trim().toLowerCase();
+            filtered = filtered.filter(c => 
+                c.message.toLowerCase().includes(searchLower) || 
+                c.displayName.toLowerCase().includes(searchLower)
+            );
+        }
+
+        return filtered;
+    }
+
+    function renderConfessions() {
+        const container = document.getElementById("confessionsContainer");
+        const filteredList = getFilteredConfessions();
+
+        if (!filteredList.length) {
+            container.innerHTML = `<div class="empty-state">🌙 Tidak ada confession yang cocok. Tuliskan sesuatu...</div>`;
+            return;
+        }
+
+        let html = "";
+        for (let conf of filteredList) {
+            const nameDisplay = escapeHtml(conf.displayName);
+            const messageDisplay = escapeHtml(conf.message).replace(/\n/g, '<br>');
+            const dateStr = formatDate(conf.timestamp);
+            const badgeText = conf.isAnonymous ? "Anonim" : "Teridentifikasi";
+
+            html += `
+                <div class="confession-item" data-id="${conf.id}">
+                    <div class="confession-header">
+                        <span class="confession-name">${nameDisplay}</span>
+                        <span class="confession-badge">${badgeText}</span>
+                    </div>
+                    <div class="confession-date">📅 ${dateStr}</div>
+                    <div class="confession-message">${messageDisplay}</div>
+                    <button class="delete-confession" data-id="${conf.id}">Hapus</button>
+                </div>
+            `;
+        }
+
+        container.innerHTML = html;
+
+        // Attach delete event listeners
+        document.querySelectorAll('.delete-confession').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = Number(btn.getAttribute('data-id'));
+                if (confirm("Yakin ingin menghapus confession ini?")) {
+                    deleteConfession(id);
+                }
+            });
+        });
+    }
+
+    // Simple XSS protection
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Event Listeners UI
+    document.getElementById("confessionForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById("authorName").value;
+        const messageInput = document.getElementById("messageText").value;
+        const isAnonymous = document.getElementById("anonymousCheckbox").checked;
+
+        if (addConfession(nameInput, messageInput, isAnonymous)) {
+            // reset form but keep name optional
+            document.getElementById("messageText").value = "";
+            document.getElementById("authorName").value = "";
+            document.getElementById("anonymousCheckbox").checked = true;
+            // optional: scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    // Search input
+    const searchInput = document.getElementById("searchInput");
+    searchInput.addEventListener("input", (e) => {
+        currentSearch = e.target.value;
+        renderConfessions();
+    });
+
+    // Filter buttons
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            filterBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentFilter = btn.getAttribute("data-filter");
+            renderConfessions();
+        });
+    });
+
+    // Initial load
+    loadConfessions();
+</script>
+</body>
+</html>
